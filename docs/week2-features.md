@@ -1,13 +1,19 @@
-# Week 2 Core Features
+Week 2 Feature Review
 
-## Feature 1: Diabetes Prediction Model
+Feature 1: Diabetes Prediction Model
+Status: Working Successfully
 
-Train machine learning models to predict whether a patient is diabetic based on healthcare attributes.
+Feature 2: Model Evaluation
+Status: Working Successfully
 
-## Feature 2: Model Evaluation Dashboard
+Feature 3: Patient Risk Prediction
+Status: Working Successfully
 
-Compare model performance using accuracy, confusion matrix, precision, recall, and F1-score.
+Additional Features:
 
-## Feature 3: Best Model Selection
+* Input Validation
+* Error Handling
+* Testing Reports
 
-Compare multiple algorithms and select the best-performing model for the final project.
+Result:
+All core features are functioning correctly and have been tested successfully.
