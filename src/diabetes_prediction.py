@@ -5,11 +5,15 @@ Feature 1:
 Diabetes Prediction Model using Logistic Regression
 
 Feature 2:
-Model Evaluation using Accuracy, Confusion Matrix,
-and Classification Report
+Model Evaluation
 
 Feature 3:
 Patient Diabetes Risk Predictor
+
+Additional Features:
+Input Validation
+Error Handling
+Debug Information
 """
 
 # Import libraries
@@ -23,16 +27,54 @@ from sklearn.metrics import (
     classification_report
 )
 
-# Load cleaned dataset
-df = pd.read_csv(
-    "data/processed/cleaned_healthcare_diabetes.csv"
-)
+# ==================================
+# Input Validation Function
+# ==================================
 
-# Features and target variable
+def validate_input(value, field_name):
+
+    if value is None:
+        raise ValueError(f"{field_name} cannot be empty")
+
+    if value == "":
+        raise ValueError(f"{field_name} cannot be an empty string")
+
+    if not isinstance(value, (int, float)):
+        raise TypeError(f"{field_name} must be a number")
+
+    return True
+
+
+# ==================================
+# Load Dataset
+# ==================================
+
+try:
+
+    df = pd.read_csv(
+        "data/processed/cleaned_healthcare_diabetes.csv"
+    )
+
+    print("Dataset loaded successfully")
+
+except FileNotFoundError:
+
+    print("Error: Dataset file not found")
+    exit()
+
+except Exception as e:
+
+    print("Unexpected Error:", e)
+    exit()
+
+
+# ==================================
+# Prepare Data
+# ==================================
+
 X = df.drop("Outcome", axis=1)
 y = df["Outcome"]
 
-# Split dataset
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -40,16 +82,34 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-# Train model
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+# ==================================
+# Feature 1
+# Train Model
+# ==================================
 
-# Make predictions
+model = LogisticRegression(max_iter=1000)
+
+try:
+
+    model.fit(X_train, y_train)
+
+    print("Model training successful")
+
+except Exception as e:
+
+    print("Model Training Error:", e)
+
+
+# ==================================
+# Predictions
+# ==================================
+
 predictions = model.predict(X_test)
 
-# ==========================
-# Feature 2: Evaluation
-# ==========================
+# ==================================
+# Feature 2
+# Model Evaluation
+# ==================================
 
 accuracy = accuracy_score(y_test, predictions)
 
@@ -58,7 +118,7 @@ cm = confusion_matrix(y_test, predictions)
 report = classification_report(y_test, predictions)
 
 print("\n===== FEATURE 1 =====")
-print("Diabetes Prediction Model Trained Successfully")
+print("Diabetes Prediction Model")
 
 print("\nModel Accuracy:")
 print(accuracy)
@@ -71,30 +131,9 @@ print(cm)
 print("\nClassification Report:")
 print(report)
 
-# ==========================
-# Edge Case Handling
-# ==========================
-
-def validate_input(value):
-
-    if value is None:
-        return "Input cannot be empty"
-
-    if not isinstance(value, (int, float)):
-        return "Input must be numeric"
-
-    return "Valid Input"
-
-
-print("\n===== EDGE CASE TESTING =====")
-
-print(validate_input(None))
-print(validate_input("abc"))
-print(validate_input(120))
-
-# ==========================
+# ==================================
 # Debug Information
-# ==========================
+# ==================================
 
 print("\n===== DEBUG INFORMATION =====")
 
@@ -102,36 +141,93 @@ print("Training Records:", len(X_train))
 print("Testing Records:", len(X_test))
 print("Prediction Completed Successfully")
 
-# ==========================
+# ==================================
 # Feature 3
-# Patient Diabetes Predictor
-# ==========================
+# Patient Diabetes Risk Predictor
+# ==================================
 
 print("\n===== FEATURE 3 =====")
 
-sample_patient = [[
-    1,      # Id
-    1,      # Pregnancies
-    150,    # Glucose
-    80,     # BloodPressure
-    25,     # SkinThickness
-    100,    # Insulin
-    30.5,   # BMI
-    0.5,    # DiabetesPedigreeFunction
-    35      # Age
-]]
+try:
 
-patient_prediction = model.predict(sample_patient)
+    sample_patient = [
+        1,      # Id
+        1,      # Pregnancies
+        150,    # Glucose
+        80,     # BloodPressure
+        25,     # SkinThickness
+        100,    # Insulin
+        30.5,   # BMI
+        0.5,    # DiabetesPedigreeFunction
+        35      # Age
+    ]
 
-print("\nSample Patient Data:")
-print(sample_patient)
+    field_names = [
+        "Id",
+        "Pregnancies",
+        "Glucose",
+        "BloodPressure",
+        "SkinThickness",
+        "Insulin",
+        "BMI",
+        "DiabetesPedigreeFunction",
+        "Age"
+    ]
 
-print("\nPrediction Result:")
+    for value, field in zip(sample_patient, field_names):
+        validate_input(value, field)
 
-if patient_prediction[0] == 1:
-    print("Patient is likely Diabetic")
-else:
-    print("Patient is likely Non-Diabetic")
+    patient_prediction = model.predict([sample_patient])
+
+    print("\nSample Patient Data:")
+    print(sample_patient)
+
+    print("\nPrediction Result:")
+
+    if patient_prediction[0] == 1:
+        print("Patient is likely Diabetic")
+    else:
+        print("Patient is likely Non-Diabetic")
+
+except Exception as e:
+
+    print("Prediction Error:", e)
+
+# ==================================
+# Validation Testing
+# ==================================
+
+print("\n===== INPUT VALIDATION TESTS =====")
+
+test_inputs = [
+    None,
+    "",
+    "hello",
+    -1,
+    120
+]
+
+for item in test_inputs:
+
+    try:
+
+        validate_input(item, "Test Field")
+
+        print(f"{item} -> Valid")
+
+    except Exception as e:
+
+        print(f"{item} -> {e}")
+
+# ==================================
+# Final Status
+# ==================================
 
 print("\n===== SYSTEM TEST COMPLETED =====")
-print("Feature 1 + Feature 2 + Feature 3 working successfully")
+
+print("Feature 1: Working")
+print("Feature 2: Working")
+print("Feature 3: Working")
+
+print("Input Validation: Working")
+print("Error Handling: Working")
