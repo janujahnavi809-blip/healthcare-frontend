@@ -31,17 +31,22 @@ from sklearn.metrics import (
 # Input Validation Function
 # ==================================
 
+# Validate user input before prediction
 def validate_input(value, field_name):
 
+    # Check if input is empty
     if value is None:
         raise ValueError(f"{field_name} cannot be empty")
 
+    # Check if input is an empty string
     if value == "":
         raise ValueError(f"{field_name} cannot be an empty string")
 
+    # Check if input is numeric
     if not isinstance(value, (int, float)):
         raise TypeError(f"{field_name} must be a number")
 
+    # Input is valid
     return True
 
 

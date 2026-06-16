@@ -1,33 +1,33 @@
 # Healthcare Diabetes Analysis Project
 
-## Student
+## Project Overview
 
-ADAVALA JAHNAVI
+This project analyzes healthcare diabetes data and uses machine learning to predict whether a patient is likely to have diabetes.
 
-## Problem Statement
+## Features Implemented
 
-Diabetes is one of the most common health conditions worldwide. This project analyzes healthcare data to identify important factors related to diabetes and prepare the dataset for machine learning.
+### Feature 1: Diabetes Prediction Model
 
-## Dataset Source
+Built a Logistic Regression model to predict diabetes outcomes.
 
-Dataset Name:
-Healthcare Diabetes Dataset
+### Feature 2: Model Evaluation
 
-Source:
-https://www.kaggle.com/datasets/nanditapore/healthcare-diabetes
+Evaluated model performance using:
 
-## Approach
+* Accuracy
+* Confusion Matrix
+* Classification Report
 
-1. Downloaded healthcare dataset
-2. Performed exploratory data analysis (EDA)
-3. Checked shape, columns and data types
-4. Identified missing values
-5. Created visualizations
-6. Cleaned dataset
-7. Removed duplicates
-8. Performed feature engineering
-9. Scaled numerical features
-10. Split data into training and testing sets
+### Feature 3: Patient Risk Prediction
+
+Predicts diabetes risk for a sample patient using the trained model.
+
+## Testing
+
+* Input validation implemented
+* Error handling implemented
+* Multiple test cases executed
+* End-to-end system testing completed
 
 ## Technologies Used
 
@@ -38,23 +38,6 @@ https://www.kaggle.com/datasets/nanditapore/healthcare-diabetes
 * Git
 * GitHub
 
-## Project Structure
+## Current Status
 
-data/
-docs/
-src/
-README.md
-
-## Results
-
-The dataset contains 2768 patient records and 10 healthcare-related attributes. Data preprocessing and feature engineering were completed successfully.
-
-## Visualizations
-
-### Age Distribution
-
-![Age Distribution](docs/age_distribution.png)
-
-### BMI Distribution
-
-![BMI Distribution](docs/bmi_distribution.png)
+Project successfully completed through Feature 3 implementation and testing phase.
