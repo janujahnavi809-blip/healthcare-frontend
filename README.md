@@ -39,5 +39,10 @@ Predicts diabetes risk for a sample patient using the trained model.
 * GitHub
 
 ## Current Status
+## Mobile View Testing
+
+The project is currently developed as a Python console-based application. Since it does not have a web interface, mobile responsiveness testing is not applicable at this stage.
+
+In future versions, if a web interface is developed using technologies such as HTML, CSS, React, or Flask, mobile responsiveness testing will be performed to ensure compatibility across different screen sizes.
 
 Project successfully completed through Feature 3 implementation and testing phase.

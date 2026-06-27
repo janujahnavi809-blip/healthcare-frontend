@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+import os
+import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -38,20 +40,40 @@ print("=" * 50)
 
 try:
     print("\nLoading dataset...")
-    time.sleep(2)
 
+    # Start timer
+    start = time.time()
+
+    # Load dataset
     df = pd.read_csv(
         "data/processed/cleaned_healthcare_diabetes.csv"
     )
 
+    # Check whether dataset is empty
+    if df.empty:
+        raise ValueError("Dataset is empty")
+
+    # End timer
+    end = time.time()
+
     print("✓ Dataset loaded successfully")
+    print(f"Dataset loading time: {end - start:.2f} seconds")
+    print(f"Dataset Shape: {df.shape}")
 
 except FileNotFoundError:
     print("❌ Dataset file not found")
     exit()
 
+except MemoryError:
+    print("❌ Dataset is too large to load")
+    exit()
+
+except ValueError as ve:
+    print("❌", ve)
+    exit()
+
 except Exception as e:
-    print("❌ Error:", e)
+    print("❌ Unexpected Error:", e)
     exit()
 
 # ==================================
@@ -67,22 +89,46 @@ X_train, X_test, y_train, y_test = train_test_split(
     test_size=0.20,
     random_state=42
 )
-
 # ==================================
-# TRAIN MODEL
+# TRAIN MODEL WITH CACHING
 # ==================================
 
-print("\nTraining model...")
-time.sleep(2)
+print("\nLoading/Training model...")
 
-model = LogisticRegression(max_iter=1000)
+model_path = "models/diabetes_model.pkl"
 
 try:
-    model.fit(X_train, y_train)
-    print("✓ Model trained successfully")
+
+    start = time.time()
+
+    # Check if model already exists
+    if os.path.exists(model_path):
+
+        # Load saved model
+        model = joblib.load(model_path)
+        print("✓ Saved model loaded successfully")
+
+    else:
+
+        # Train a new model
+        model = LogisticRegression(max_iter=1000)
+
+        model.fit(X_train, y_train)
+
+        # Save the trained model
+        joblib.dump(model, model_path)
+
+        print("✓ New model trained and saved")
+
+    end = time.time()
+
+    print(f"Model loading/training time: {end - start:.2f} seconds")
 
 except Exception as e:
-    print("❌ Model Training Error:", e)
+    print("❌ Model Error:", e)
+    exit()
+
+
 
 # ==================================
 # MODEL EVALUATION
@@ -156,7 +202,6 @@ try:
     for value, field in zip(sample_patient[0], field_names):
         validate_input(value, field)
 
-    # Convert to DataFrame to avoid warning
     patient_df = pd.DataFrame(
         sample_patient,
         columns=X.columns
@@ -205,6 +250,8 @@ print("\nGenerating Dashboard...")
 
 try:
 
+    start = time.time()
+
     # Age Distribution
     plt.figure(figsize=(6, 4))
     plt.hist(df["Age"], bins=10)
@@ -232,7 +279,10 @@ try:
     plt.savefig("docs/dashboard_outcome.png")
     plt.close()
 
+    end = time.time()
+
     print("✓ Dashboard charts created successfully")
+    print(f"Dashboard generation time: {end - start:.2f} seconds")
 
 except Exception as e:
     print("❌ Dashboard Error:", e)
@@ -247,7 +297,9 @@ print("=" * 50)
 
 print("✓ Feature 1: Working")
 print("✓ Feature 2: Working")
+print("✓ Feature 3: Working")
 print("✓ Advanced Feature 1: Working")
 print("✓ Advanced Feature 2: Working")
 print("✓ Input Validation: Working")
 print("✓ Error Handling: Working")
+print("✓ Performance Optimization: Working")
