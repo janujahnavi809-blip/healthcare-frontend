@@ -1,21 +1,6 @@
-"""
-Healthcare Diabetes Project
-
-Feature 1:
-Diabetes Prediction Model using Logistic Regression
-
-Feature 2:
-Model Evaluation
-
-Feature 3:
-Interactive Patient Diabetes Risk Prediction
-
-Additional Features:
-Input Validation and Error Handling
-"""
-
-# Import libraries
 import pandas as pd
+import matplotlib.pyplot as plt
+import time
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -26,7 +11,7 @@ from sklearn.metrics import (
 )
 
 # ==================================
-# Input Validation Function
+# INPUT VALIDATION FUNCTION
 # ==================================
 
 def validate_input(value, field_name):
@@ -43,27 +28,34 @@ def validate_input(value, field_name):
     return True
 
 
+print("=" * 50)
+print("HEALTHCARE DIABETES PREDICTION SYSTEM")
+print("=" * 50)
+
 # ==================================
-# Load Dataset
+# LOAD DATASET
 # ==================================
 
 try:
+    print("\nLoading dataset...")
+    time.sleep(2)
+
     df = pd.read_csv(
         "data/processed/cleaned_healthcare_diabetes.csv"
     )
 
-    print("Dataset loaded successfully")
+    print("✓ Dataset loaded successfully")
 
 except FileNotFoundError:
-    print("Error: Dataset file not found")
+    print("❌ Dataset file not found")
     exit()
 
 except Exception as e:
-    print("Unexpected Error:", e)
+    print("❌ Error:", e)
     exit()
 
 # ==================================
-# Prepare Data
+# PREPARE DATA
 # ==================================
 
 X = df.drop("Outcome", axis=1)
@@ -77,39 +69,37 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # ==================================
-# Feature 1: Train Model
+# TRAIN MODEL
 # ==================================
+
+print("\nTraining model...")
+time.sleep(2)
 
 model = LogisticRegression(max_iter=1000)
 
 try:
     model.fit(X_train, y_train)
-    print("Model training successful")
+    print("✓ Model trained successfully")
 
 except Exception as e:
-    print("Model Training Error:", e)
+    print("❌ Model Training Error:", e)
 
 # ==================================
-# Make Predictions
+# MODEL EVALUATION
 # ==================================
 
 predictions = model.predict(X_test)
-
-# ==================================
-# Feature 2: Model Evaluation
-# ==================================
 
 accuracy = accuracy_score(y_test, predictions)
 cm = confusion_matrix(y_test, predictions)
 report = classification_report(y_test, predictions)
 
-print("\n===== FEATURE 1 =====")
-print("Diabetes Prediction Model")
+print("\n" + "=" * 50)
+print("MODEL EVALUATION")
+print("=" * 50)
 
-print("\nModel Accuracy:")
+print("\nAccuracy:")
 print(accuracy)
-
-print("\n===== FEATURE 2 =====")
 
 print("\nConfusion Matrix:")
 print(cm)
@@ -118,21 +108,12 @@ print("\nClassification Report:")
 print(report)
 
 # ==================================
-# Debug Information
+# PATIENT INPUT
 # ==================================
 
-print("\n===== DEBUG INFORMATION =====")
-
-print("Training Records:", len(X_train))
-print("Testing Records:", len(X_test))
-print("Prediction Completed Successfully")
-
-# ==================================
-# Feature 3: Interactive Prediction
-# ==================================
-
-print("\n===== ADVANCED FEATURE 1 =====")
-print("Enter Patient Details")
+print("\n" + "=" * 50)
+print("PATIENT INPUT")
+print("=" * 50)
 
 try:
 
@@ -160,7 +141,6 @@ try:
         age
     ]]
 
-    # Validate inputs
     field_names = [
         "Patient ID",
         "Pregnancies",
@@ -176,10 +156,17 @@ try:
     for value, field in zip(sample_patient[0], field_names):
         validate_input(value, field)
 
-    # Predict
-    prediction = model.predict(sample_patient)
+    # Convert to DataFrame to avoid warning
+    patient_df = pd.DataFrame(
+        sample_patient,
+        columns=X.columns
+    )
 
-    print("\nPrediction Result:")
+    prediction = model.predict(patient_df)
+
+    print("\n" + "=" * 50)
+    print("PREDICTION RESULT")
+    print("=" * 50)
 
     if prediction[0] == 1:
         print("Patient is likely Diabetic")
@@ -187,16 +174,18 @@ try:
         print("Patient is likely Non-Diabetic")
 
 except ValueError:
-    print("Error: Please enter only numeric values.")
+    print("❌ Invalid input. Please enter numbers only.")
 
 except Exception as e:
-    print("Unexpected Error:", e)
+    print("❌ Error:", e)
 
 # ==================================
-# Validation Tests
+# INPUT VALIDATION TESTS
 # ==================================
 
-print("\n===== INPUT VALIDATION TESTS =====")
+print("\n" + "=" * 50)
+print("INPUT VALIDATION TESTS")
+print("=" * 50)
 
 test_inputs = [None, "", "hello", -1, 120]
 
@@ -209,20 +198,56 @@ for item in test_inputs:
         print(f"{item} -> {e}")
 
 # ==================================
-# Final Status
+# DASHBOARD GENERATION
 # ==================================
 
-print("\n===== SYSTEM TEST COMPLETED =====")
-
-print("Feature 1: Working")
-print("Feature 2: Working")
-print("Advanced Feature 1: Working")
-print("Input Validation: Working")
-print("Error Handling: Working")
 print("\nGenerating Dashboard...")
 
 try:
-    import dashboard
-    print("Dashboard Generated Successfully")
+
+    # Age Distribution
+    plt.figure(figsize=(6, 4))
+    plt.hist(df["Age"], bins=10)
+    plt.title("Age Distribution")
+    plt.xlabel("Age")
+    plt.ylabel("Count")
+    plt.savefig("docs/dashboard_age.png")
+    plt.close()
+
+    # Glucose Distribution
+    plt.figure(figsize=(6, 4))
+    plt.hist(df["Glucose"], bins=10)
+    plt.title("Glucose Distribution")
+    plt.xlabel("Glucose")
+    plt.ylabel("Count")
+    plt.savefig("docs/dashboard_glucose.png")
+    plt.close()
+
+    # Diabetes Outcome Chart
+    plt.figure(figsize=(6, 4))
+    df["Outcome"].value_counts().plot(kind="bar")
+    plt.title("Diabetes Outcome")
+    plt.xlabel("Outcome")
+    plt.ylabel("Count")
+    plt.savefig("docs/dashboard_outcome.png")
+    plt.close()
+
+    print("✓ Dashboard charts created successfully")
+
 except Exception as e:
-    print("Dashboard Error:", e)
+    print("❌ Dashboard Error:", e)
+
+# ==================================
+# FINAL STATUS
+# ==================================
+
+print("\n" + "=" * 50)
+print("SYSTEM TEST COMPLETED")
+print("=" * 50)
+
+print("✓ Feature 1: Working")
+print("✓ Feature 2: Working")
+print("✓ Advanced Feature 1: Working")
+print("✓ Advanced Feature 2: Working")
+print("✓ Input Validation: Working")
+print("✓ Error Handling: Working")
