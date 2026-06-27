@@ -59,6 +59,10 @@ try:
     print("✓ Dataset loaded successfully")
     print(f"Dataset loading time: {end - start:.2f} seconds")
     print(f"Dataset Shape: {df.shape}")
+    print("\nCharts saved in the docs folder:")
+    print(" - docs/dashboard_age.png")
+    print(" - docs/dashboard_glucose.png")
+    print(" - docs/dashboard_outcome.png")
 
 except FileNotFoundError:
     print("❌ Dataset file not found")
@@ -163,17 +167,18 @@ print("=" * 50)
 
 try:
 
-    patient_id = int(input("Enter Patient ID: "))
-    pregnancies = int(input("Enter Pregnancies: "))
-    glucose = int(input("Enter Glucose Level: "))
-    blood_pressure = int(input("Enter Blood Pressure: "))
-    skin_thickness = int(input("Enter Skin Thickness: "))
-    insulin = int(input("Enter Insulin Level: "))
-    bmi = float(input("Enter BMI: "))
+    patient_id = int(input("Enter Patient ID (example: 1): "))
+    pregnancies = int(input("Enter Pregnancies (0-20): "))
+    glucose = int(input("Enter Glucose Level (70-200): "))
+    blood_pressure = int(input("Enter Blood Pressure (60-180): "))
+    skin_thickness = int(input("Enter Skin Thickness (10-99): "))
+    insulin = int(input("Enter Insulin Level (15-300): "))
+    bmi = float(input("Enter BMI (15.0-50.0): "))
     diabetes_pedigree = float(
-        input("Enter Diabetes Pedigree Function: ")
+        input("Enter Diabetes Pedigree Function (0.0-2.5): ")
     )
-    age = int(input("Enter Age: "))
+    age = int(input("Enter Age (1-100): "))
+    
 
     sample_patient = [[
         patient_id,
@@ -214,9 +219,13 @@ try:
     print("=" * 50)
 
     if prediction[0] == 1:
-        print("Patient is likely Diabetic")
+         print("\nPrediction Result:")
+         print("Patient is likely Diabetic")
+         print("Recommendation: Please consult a healthcare professional.")
     else:
+        print("\nPrediction Result:")
         print("Patient is likely Non-Diabetic")
+        print("Recommendation: Continue maintaining a healthy lifestyle.")
 
 except ValueError:
     print("❌ Invalid input. Please enter numbers only.")
