@@ -219,3 +219,10 @@ print("Feature 2: Working")
 print("Advanced Feature 1: Working")
 print("Input Validation: Working")
 print("Error Handling: Working")
+print("\nGenerating Dashboard...")
+
+try:
+    import dashboard
+    print("Dashboard Generated Successfully")
+except Exception as e:
+    print("Dashboard Error:", e)
